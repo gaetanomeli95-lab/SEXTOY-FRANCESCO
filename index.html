@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INDOCILE — Il piacere non chiede permesso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0a0a;
+    --bg2:#171010;
+    --card:#1a1214;
+    --bordeaux:#7a2434;
+    --bordeaux-light:#9a3448;
+    --cream:#f2ece4;
+    --muted:#a89a92;
+    --line:rgba(242,236,228,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+
+  /* ============ HEADER ============ */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;
+    background:linear-gradient(180deg,rgba(14,10,10,.92),rgba(14,10,10,0));
+    transition:background .3s;
+  }
+  header.scrolled{background:rgba(14,10,10,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .logo{height:44px;width:auto;filter:invert(1) brightness(1.15);object-fit:contain}
+  nav{display:flex;gap:34px}
+  nav a{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  nav a:hover{color:var(--cream)}
+  .header-icons{display:flex;gap:22px;align-items:center}
+  .header-icons svg{width:20px;height:20px;stroke:var(--cream);fill:none;stroke-width:1.5;cursor:pointer;transition:stroke .2s}
+  .header-icons svg:hover{stroke:var(--bordeaux-light)}
+  .cart-badge{position:relative}
+  .cart-badge span{
+    position:absolute;top:-7px;right:-9px;background:var(--bordeaux);color:#fff;
+    font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    background:url('assets/hero.png') right center/cover no-repeat;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(14,10,10,.97) 0%,rgba(14,10,10,.85) 32%,rgba(14,10,10,.35) 60%,rgba(14,10,10,.15) 100%);
+  }
+  .hero-content{position:relative;z-index:2;max-width:640px;padding:0 48px;margin-top:40px}
+  .hero-eyebrow{font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:var(--bordeaux-light);margin-bottom:24px}
+  h1{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(44px,6.2vw,84px);line-height:1.04;margin-bottom:28px;
+  }
+  .hero-sub{font-size:17px;line-height:1.7;color:var(--muted);max-width:440px;margin-bottom:40px}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:16px 32px;border-radius:40px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    cursor:pointer;border:1px solid transparent;transition:all .25s;font-family:'Jost',sans-serif;
+  }
+  .btn-primary{background:var(--bordeaux);color:#fff}
+  .btn-primary:hover{background:var(--bordeaux-light);transform:translateY(-2px)}
+  .btn-outline{border-color:var(--line);color:var(--cream);background:rgba(255,255,255,.03)}
+  .btn-outline:hover{border-color:var(--cream)}
+  .btn .arrow{transition:transform .25s}
+  .btn:hover .arrow{transform:translateX(4px)}
+
+  /* ============ TRUST STRIP ============ */
+  .trust{
+    display:flex;justify-content:center;gap:60px;flex-wrap:wrap;
+    padding:26px 48px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:var(--bg2);
+  }
+  .trust div{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .trust svg{width:18px;height:18px;stroke:var(--bordeaux-light);fill:none;stroke-width:1.5}
+
+  /* ============ SECTIONS ============ */
+  section{padding:90px 48px}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:50px;gap:24px;flex-wrap:wrap}
+  .section-head h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:500;line-height:1.1}
+  .section-head .note{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  /* ============ CATEGORIES ============ */
+  .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+  .cat{
+    border:1px solid var(--line);border-radius:6px;padding:28px 22px;background:var(--card);
+    cursor:pointer;transition:border-color .25s,transform .25s;
+  }
+  .cat:hover{border-color:var(--bordeaux-light);transform:translateY(-3px)}
+  .cat.active{border-color:var(--bordeaux);background:linear-gradient(160deg,rgba(122,36,52,.25),var(--card))}
+  .cat h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:6px}
+  .cat p{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+  /* ============ PRODUCT GRID ============ */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+  .product{
+    background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;
+    transition:transform .3s,border-color .3s;display:flex;flex-direction:column;
+  }
+  .product:hover{transform:translateY(-5px);border-color:rgba(154,52,72,.5)}
+  .product-img{position:relative;aspect-ratio:1;background:#f5f2ee;overflow:hidden}
+  .product-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .product:hover .product-img img{transform:scale(1.05)}
+  .tag{
+    position:absolute;top:12px;left:12px;background:var(--bordeaux);color:#fff;
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:20px;
+  }
+  .product-body{padding:20px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .product-brand{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bordeaux-light)}
+  .product-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;line-height:1.25}
+  .product-cat{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+  .price-row{display:flex;align-items:baseline;gap:12px;margin-top:auto;padding-top:14px}
+  .price{font-size:22px;font-weight:400}
+  .price small{font-size:13px;color:var(--muted)}
+  .markup-info{font-size:11px;color:var(--muted);line-height:1.5;display:none;border-top:1px dashed var(--line);padding-top:10px;margin-top:6px}
+  .markup-info.visible{display:block}
+  .markup-info b{color:var(--bordeaux-light);font-weight:500}
+  .add-btn{
+    margin-top:12px;width:100%;padding:12px;border-radius:30px;border:1px solid var(--line);
+    background:transparent;color:var(--cream);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    cursor:pointer;transition:all .25s;font-family:'Jost',sans-serif;
+  }
+  .add-btn:hover{background:var(--bordeaux);border-color:var(--bordeaux)}
+
+  .margin-toggle{
+    display:flex;align-items:center;gap:12px;margin-bottom:36px;font-size:13px;color:var(--muted);
+  }
+  .switch{position:relative;width:44px;height:22px;background:var(--card);border:1px solid var(--line);border-radius:20px;cursor:pointer;transition:background .25s}
+  .switch::after{content:'';position:absolute;top:2px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:all .25s}
+  .switch.on{background:var(--bordeaux);border-color:var(--bordeaux)}
+  .switch.on::after{left:23px;background:#fff}
+
+  /* ============ FORMULA BANNER ============ */
+  .formula{
+    margin:70px 48px 0;padding:44px 48px;border-radius:8px;
+    background:linear-gradient(120deg,rgba(122,36,52,.28),rgba(23,16,16,.6));
+    border:1px solid rgba(154,52,72,.35);
+    display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  }
+  .formula h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;margin-bottom:8px}
+  .formula p{color:var(--muted);font-size:14px;max-width:520px;line-height:1.6}
+  .formula .eq{
+    font-family:'Cormorant Garamond',serif;font-size:26px;white-space:nowrap;
+    padding:18px 32px;border:1px solid var(--line);border-radius:8px;background:rgba(14,10,10,.5);
+  }
+  .formula .eq b{color:var(--bordeaux-light);font-weight:600}
+
+  /* ============ FOOTER ============ */
+  footer{margin-top:100px;border-top:1px solid var(--line);padding:60px 48px 30px;background:var(--bg2)}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+  .footer-grid img{height:50px;width:auto;filter:invert(1) brightness(1.15);margin-bottom:18px}
+  .footer-grid p{font-size:13px;color:var(--muted);line-height:1.7;max-width:300px}
+  .footer-grid h4{font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px;color:var(--cream);font-weight:500}
+  .footer-grid ul{list-style:none}
+  .footer-grid li{margin-bottom:10px}
+  .footer-grid li a{font-size:13px;color:var(--muted);transition:color .2s}
+  .footer-grid li a:hover{color:var(--cream)}
+  .footer-bottom{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:12px}
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;bottom:30px;right:30px;background:var(--bordeaux);color:#fff;
+    padding:14px 26px;border-radius:40px;font-size:13px;letter-spacing:.08em;
+    opacity:0;transform:translateY(20px);transition:all .35s;z-index:200;pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateY(0)}
+
+  .demo-banner{
+    background:var(--bordeaux);color:#fff;text-align:center;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;position:fixed;top:0;width:100%;z-index:101;
+  }
+
+  @media(max-width:900px){
+    header{padding:14px 20px}
+    nav{display:none}
+    .hero-content,section{padding-left:20px;padding-right:20px}
+    .formula{margin:70px 20px 0}
+    .footer-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">Demo INDOCILE — catalogo Rimba.eu · rincaro automatico +25%</div>
+
+<header id="header">
+  <a href="#"><img src="assets/logo.png" alt="INDOCILE" class="logo"></a>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#shop">Collezioni</a>
+    <a href="#">Wellness</a>
+    <a href="#">Chi siamo</a>
+  </nav>
+  <div class="header-icons">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    <div class="cart-badge">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l1.5 13.5a1 1 0 0 1-1 1.1H5.5a1 1 0 0 1-1-1.1L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+      <span id="cartCount">0</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Boutique del piacere · spedizione discreta</div>
+    <h1>Il piacere<br>non chiede<br>permesso.</h1>
+    <p class="hero-sub">Design, benessere intimo e desiderio in una nuova forma. Un'esperienza premium, discreta e fuori dagli schemi.</p>
+    <div class="hero-cta">
+      <a href="#shop" class="btn btn-primary">Scopri la collezione <span class="arrow">→</span></a>
+      <a href="#shop" class="btn btn-outline">Best seller</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<div class="trust">
+  <div><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/></svg> Spedizione anonima</div>
+  <div><svg viewBox="0 0 24 24"><path d="M12 22s8-3.5 8-10V5l-8-3-8 3v7c0 6.5 8 10 8 10z"/></svg> Pagamenti sicuri</div>
+  <div><svg viewBox="0 0 24 24"><path d="M1 8h15v9H1zM16 12h4l3 3v2h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg> Consegna 24/48h</div>
+  <div><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Reso facile</div>
+</div>
+
+<!-- ============ SHOP ============ -->
+<section id="shop">
+  <div class="section-head">
+    <h2>La collezione</h2>
+    <span class="note" id="prodCount"></span>
+  </div>
+
+  <div class="cats" id="cats"></div>
+
+  <div class="margin-toggle">
+    <div class="switch" id="markupSwitch" onclick="toggleMarkup(this)"></div>
+    <span>Mostra margine fornitore (+25%)</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="formula">
+    <div>
+      <h3>Modello dropshipping</h3>
+      <p>Ogni articolo del catalogo Rimba viene rivenduto su INDOCILE con un rincaro automatico del 25% sul prezzo wholesale. Tu vendi, il fornitore spedisce.</p>
+    </div>
+    <div class="eq">Prezzo Rimba × <b>1,25</b> = Prezzo INDOCILE</div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <img src="assets/logo.png" alt="INDOCILE">
+      <p>Boutique online del benessere intimo. Prodotti selezionati, spedizione discreta, esperienza premium.</p>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">Vibratori</a></li>
+        <li><a href="#">Lingerie</a></li>
+        <li><a href="#">Bondage</a></li>
+        <li><a href="#">Lubrificanti</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Assistenza</h4>
+      <ul>
+        <li><a href="#">Spedizioni</a></li>
+        <li><a href="#">Resi</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contatti</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Legale</h4>
+      <ul>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Termini</a></li>
+        <li><a href="#">Cookie</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 INDOCILE — Demo tecnica, non un negozio reale</span>
+    <span>Prodotti demo da catalogo Rimba.eu (wholesale B2B)</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Aggiunto al carrello</div>
+
+<script>
+/*
+ * DEMO INDOCILE — modello dropshipping
+ * I prodotti sono articoli reali del catalogo Rimba.eu (immagini CDN ufficiali).
+ * NOTA: i prezzi wholesale reali sono visibili solo ai clienti B2B registrati su rimba.eu.
+ * Qui usiamo prezzi wholesale SIMULATI a scopo dimostrativo:
+ * il prezzo vendita INDOCILE = wholesale × 1.25 (+25%)
+ */
+const MARKUP = 1.25;
+
+const PRODUCTS = [
+  { id:13062, brand:"Satisfyer",          name:"Pearl Bunny 2 — Rotating Rabbit Vibrator",            cat:"Vibratori",     wholesale:33.50, img:"https://cdn.rimba.eu/images/13062/20260123081929_69732101c4e21.jpg", tag:"Best seller" },
+  { id:12064, brand:"LELO",               name:"Ina Twist — Rabbit Vibrator Aqua",                    cat:"Vibratori",     wholesale:139.00, img:"https://cdn.rimba.eu/images/12064/20260630122717_6a439a05deb29.jpg", tag:"Premium" },
+  { id:3047,  brand:"ILY",                name:"The Rabbit — Bullet Vibrator Pink",                   cat:"Vibratori",     wholesale:14.90, img:"https://cdn.rimba.eu/images/3047/20260921092514_6ab0dbda1dee5.jpg" },
+  { id:7844,  brand:"Rimba Bondage Play", name:"Neon Stim Wand — 220V EU",                            cat:"Electro Play",  wholesale:44.00, img:"https://cdn.rimba.eu/images/7844/20260220115207_69983cd744ce1.jpg", tag:"Nuovo" },
+  { id:8241,  brand:"Rimba Bondage Play", name:"Leather Hand Cuffs — Detachable Chain",               cat:"Bondage",       wholesale:21.50, img:"https://cdn.rimba.eu/images/8241/031025120130_rimba-bondage-play-leather-hand-cuffs-with-detachable-chain-black-silver_01.jpg" },
+  { id:1538,  brand:"Rimba",              name:"Babydoll & G-String",                                 cat:"Lingerie",      wholesale:18.90, img:"https://cdn.rimba.eu/images/1538.7/rimba-babydoll-and-g-string_01.jpg" },
+  { id:12505, brand:"Pjur",               name:"Woman Nude — Water-Based Lubricant 30ml",             cat:"Lubrificanti",  wholesale:7.90,  img:"https://cdn.rimba.eu/images/12505/20260203094317_6981b525ca504.jpg" },
+  { id:11754, brand:"ILY",                name:"Luxury Limited Edition Calendar — 24 pcs",            cat:"Gift Set",      wholesale:95.00, img:"https://cdn.rimba.eu/images/11754/20260929095304_6abb6e601f497.jpg", tag:"Limited" },
+];
+
+// Prezzo retail: wholesale +25%, arrotondato a ,95
+const retail = w => Math.floor(w * MARKUP) + 0.95;
+const fmt = n => "€" + n.toFixed(2).replace(".", ",");
+
+let activeCat = "Tutti";
+let cart = 0;
+
+function renderCats(){
+  const cats = ["Tutti", ...new Set(PRODUCTS.map(p => p.cat))];
+  document.getElementById("cats").innerHTML = cats.map(c =>
+    `<div class="cat ${c===activeCat?'active':''}" onclick="filterCat('${c}')">
+       <h3>${c}</h3>
+       <p>${c==="Tutti" ? PRODUCTS.length : PRODUCTS.filter(p=>p.cat===c).length} articoli</p>
+     </div>`).join("");
+}
+
+function renderGrid(){
+  const list = activeCat==="Tutti" ? PRODUCTS : PRODUCTS.filter(p=>p.cat===activeCat);
+  document.getElementById("prodCount").textContent = list.length + " prodotti · catalogo Rimba.eu";
+  document.getElementById("grid").innerHTML = list.map(p => `
+    <div class="product">
+      <div class="product-img">
+        ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.parentElement.style.background='#2a1d20'">
+      </div>
+      <div class="product-body">
+        <span class="product-brand">${p.brand}</span>
+        <div class="product-name">${p.name}</div>
+        <span class="product-cat">${p.cat} · art. ${p.id}</span>
+        <div class="price-row">
+          <span class="price">${fmt(retail(p.wholesale))}</span>
+          <small>IVA incl.</small>
+        </div>
+        <div class="markup-info">
+          Costo Rimba <b>${fmt(p.wholesale)}</b> × 1,25 = <b>${fmt(p.wholesale*1.25)}</b> → vendita <b>${fmt(retail(p.wholesale))}</b><br>
+          Margine lordo: <b>${fmt(retail(p.wholesale)-p.wholesale)}</b>
+        </div>
+        <button class="add-btn" onclick="addToCart('${p.name.replace(/'/g,"\\'")}')">Aggiungi al carrello</button>
+      </div>
+    </div>`).join("");
+  if(showMarkup) document.querySelectorAll(".markup-info").forEach(e=>e.classList.add("visible"));
+}
+
+function filterCat(c){ activeCat=c; renderCats(); renderGrid(); }
+
+let showMarkup = false;
+function toggleMarkup(el){
+  showMarkup = !showMarkup;
+  el.classList.toggle("on", showMarkup);
+  document.querySelectorAll(".markup-info").forEach(e=>e.classList.toggle("visible", showMarkup));
+}
+
+function addToCart(name){
+  cart++;
+  document.getElementById("cartCount").textContent = cart;
+  const t = document.getElementById("toast");
+  t.textContent = "Aggiunto: " + name;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+window.addEventListener("scroll", () =>
+  document.getElementById("header").classList.toggle("scrolled", scrollY > 40));
+
+renderCats();
+renderGrid();
+</script>
+</body>
+</html>
