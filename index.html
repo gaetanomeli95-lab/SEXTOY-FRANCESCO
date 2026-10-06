@@ -182,9 +182,28 @@
   @media(max-width:900px){
     header{padding:14px 20px}
     nav{display:none}
-    .hero-content,section{padding-left:20px;padding-right:20px}
-    .formula{margin:70px 20px 0}
+    .hero{
+      min-height:100svh;
+      background-position:68% top;
+      align-items:flex-end;
+    }
+    .hero::before{
+      background:linear-gradient(180deg,rgba(14,10,10,.55) 0%,rgba(14,10,10,.25) 35%,rgba(14,10,10,.88) 68%,rgba(14,10,10,.97) 100%);
+    }
+    .hero-content{padding:0 20px 56px;margin-top:0;max-width:100%}
+    .hero-sub{font-size:16px}
+    section{padding-left:20px;padding-right:20px}
+    .formula{margin:70px 20px 0;padding:32px 24px}
+    .formula .eq{font-size:20px;white-space:normal}
     .footer-grid{grid-template-columns:1fr 1fr}
+    .trust{gap:24px;padding:22px 20px}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+    .product-name{font-size:17px}
+  }
+  @media(max-width:480px){
+    .hero{background-position:70% top}
+    h1{font-size:44px}
+    .btn{width:100%;justify-content:center}
   }
 </style>
 </head>
