@@ -176,13 +176,42 @@
   .toast.show{opacity:1;transform:translateY(0)}
 
   .demo-banner{
-    background:var(--bordeaux);color:#fff;text-align:center;font-size:11px;
-    letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;position:fixed;top:0;width:100%;z-index:101;
+    background:var(--bordeaux);color:#fff;text-align:center;font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;padding:6px 16px;
+    position:fixed;bottom:0;left:0;right:0;z-index:101;
   }
 
+  /* ============ MOBILE NAV ============ */
+  .hamburger{
+    display:none;background:none;border:0;cursor:pointer;padding:6px;
+  }
+  .hamburger svg{width:24px;height:24px;stroke:var(--cream);stroke-width:1.5;fill:none}
+  .mobile-nav{
+    position:fixed;inset:0;z-index:150;
+    background:rgba(14,10,10,.98);backdrop-filter:blur(12px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+    opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;
+  }
+  .mobile-nav.open{opacity:1;visibility:visible}
+  .mobile-nav a{
+    font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;
+    color:var(--cream);letter-spacing:.04em;transition:color .2s;
+  }
+  .mobile-nav a:hover{color:var(--bordeaux-light)}
+  .mobile-nav .close-x{
+    position:absolute;top:20px;right:24px;background:none;border:0;cursor:pointer;
+  }
+  .mobile-nav .close-x svg{width:28px;height:28px;stroke:var(--cream);stroke-width:1.5;fill:none}
+
   @media(max-width:900px){
-    header{padding:14px 20px}
+    header{
+      padding:12px 20px;
+      background:rgba(14,10,10,.96);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
     nav{display:none}
+    .hamburger{display:block}
+    .header-icons{gap:16px}
     .logo{height:36px}
     /* Hero: immagine sopra, testo sotto — nessuna sovrapposizione */
     .hero{
@@ -229,8 +258,21 @@
       <svg viewBox="0 0 24 24"><path d="M6 7h12l1.5 13.5a1 1 0 0 1-1 1.1H5.5a1 1 0 0 1-1-1.1L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
       <span id="cartCount">0</span>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Apri menu">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
   </div>
 </header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-x" id="closeNav" aria-label="Chiudi menu">
+    <svg viewBox="0 0 24 24"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+  </button>
+  <a href="#shop" onclick="closeMenu()">Shop</a>
+  <a href="#shop" onclick="closeMenu()">Collezioni</a>
+  <a href="#" onclick="closeMenu()">Wellness</a>
+  <a href="#" onclick="closeMenu()">Chi siamo</a>
+</div>
 
 <!-- ============ HERO ============ -->
 <section class="hero">
@@ -405,6 +447,14 @@ function addToCart(name){
 
 window.addEventListener("scroll", () =>
   document.getElementById("header").classList.toggle("scrolled", scrollY > 40));
+
+// Menu mobile
+const mobileNav = document.getElementById("mobileNav");
+function closeMenu(){ mobileNav.classList.remove("open"); document.body.style.overflow=""; }
+document.getElementById("hamburger").addEventListener("click", () => {
+  mobileNav.classList.add("open"); document.body.style.overflow="hidden";
+});
+document.getElementById("closeNav").addEventListener("click", closeMenu);
 
 renderCats();
 renderGrid();
